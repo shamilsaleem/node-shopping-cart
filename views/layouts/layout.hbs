@@ -9,8 +9,13 @@
     {{#if admin}}
     {{>admin-navbar}}
     {{else}}
+    {{#if login}}
+    {{>user-navbar-login}}
+    {{else}}
     {{>user-navbar}}
     {{/if}}
+    {{/if}}
+    
     {{{body}}}
     <script src="/bootstrap-5.3.3-dist/js/bootstrap.bundle.js"></script>
   </body>
