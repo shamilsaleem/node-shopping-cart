@@ -5,7 +5,7 @@ var constants = require('../essentials/constants')
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('users/index', {title:constants['project-name'] ,admin:false});
+  res.render('users/index', {title:constants['project-name']});
 });
 
 module.exports = router;
