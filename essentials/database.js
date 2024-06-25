@@ -10,10 +10,13 @@ const db = {
 
 //Database connection.
 async function run() {
-  await client.connect().then(() => {
-    console.log("You successfully connected to MongoDB!");
-    db.state = client;
-  });
+  await client
+    .connect()
+    .then(() => {
+      console.log("You successfully connected to MongoDB!");
+      db.state = client;
+    })
+    .catch(() => console.log("Database connection unsuccessful"));
 }
 
 module.exports.connect = run().then(() => {
