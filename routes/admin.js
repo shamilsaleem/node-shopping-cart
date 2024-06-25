@@ -5,7 +5,7 @@ var constants = require("../essentials/constants");
 var adminHelpers = require("../helpers/admin-helpers");
 
 router.get("/", function (req, res, next) {
-  if (req.session.adminData) {
+  if (req.session.admin) {
     adminHelpers
       .doAdminLogin(req.session.adminData)
       .then(() => {

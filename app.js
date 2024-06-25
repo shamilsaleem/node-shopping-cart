@@ -46,6 +46,11 @@ app.use(function (req, res, next) {
   next(createError(404));
 });
 
+// Uncommand following for enabling custom 404 message
+//app.all('*', (req, res) => {
+//  res.status(404).send('<h1>404! Page not found</h1>');
+//});
+
 // error handler
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
