@@ -29,7 +29,7 @@ module.exports = {
             let rawData = fs.readFileSync(oldPath);
 
             fs.writeFile(newPath, rawData, function (err) {
-              if (err && err.errno== -2) {
+              if (err && err.errno == -2) {
                 fs.mkdir(path.dirname(newPath), function (err) {
                   if (err) {
                     reject(err);
@@ -46,6 +46,18 @@ module.exports = {
           });
         }
       });
+    });
+  },
+
+  //Get all products
+  getAllProducts: function () {
+    return new Promise(async (resolve, reject) => {
+      var products = await db.collection.products.find().toArray();
+      if ((products == [])) {
+        reject();
+      } else {
+        resolve(products);
+      }
     });
   },
 };

@@ -10,10 +10,18 @@ router.get("/", function (req, res, next) {
     adminHelpers
       .doAdminLogin(req.session.adminData)
       .then(() => {
-        res.render("admin/home", {
-          title: constants["project-name"],
-          layout: "layout-admin",
-        });
+        productHelpers
+          .getAllProducts()
+          .then((products) => {
+            res.render("admin/home", {
+              title: constants["project-name"],
+              layout: "layout-admin",
+              products,
+            });
+          })
+          .catch(() => {
+            res.render("admin/noProducts", { layout: "layout-admin" });
+          });
       })
       .catch(() => {
         res.render("admin/login", {

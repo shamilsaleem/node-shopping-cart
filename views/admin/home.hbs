@@ -1,1 +1,46 @@
-<h1>Logged In</h1>
+<div class="container mt-4">
+  <h3 style="text-align: center;">All products</h3>
+  <table id="myTable" class="table table-striped">
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Name</th>
+        <th>MRP</th>
+        <th>Price</th>
+        <th>Options</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each products}}
+        <tr>
+          <th><img
+              src="/images/products/{{_id}}.jpg"
+              width="20px"
+              height="20px"
+            /></th>
+          <th>{{productName}}</th>
+          <th>{{productMrp}}</th>
+          <th>{{productPrice}}</th>
+          <th>
+            <div class="container-sm" style="width: max-content;">
+              <div class="row">
+                <div class="col-6">
+                  <a href="/admin/products/edit/{{_id}}"><button
+                      type="button"
+                      class="btn btn-primary"
+                    >Edit</button></a>
+                </div>
+                <div class="col-6">
+                  <form action="/admin/products/delete/" method="post">
+                    <input type="hidden" name="productId" value="{{_id}}" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </th>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
