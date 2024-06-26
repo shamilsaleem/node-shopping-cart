@@ -20,7 +20,9 @@
     <script src="/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
     <script src="DataTables/datatables.min.js"></script>
     <script>
-      $(document).ready( function () { $('#myTable').DataTable(); } );
+      $(document).ready( function () { $('#myTable').DataTable(); } ); function
+      confirmSubmit() { var agree=confirm("Are you sure you wish to delete this product?");
+      if (agree) return true ; else return false ; }
     </script>
   </body>
 </html>

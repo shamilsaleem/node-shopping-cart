@@ -33,7 +33,7 @@
                 <div class="col-6">
                   <form action="/admin/products/delete/" method="post">
                     <input type="hidden" name="productId" value="{{_id}}" />
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="submit" class="btn btn-danger" onClick='return confirmSubmit()'>Delete</button>
                   </form>
                 </div>
               </div>

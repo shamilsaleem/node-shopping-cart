@@ -5,6 +5,12 @@ var constants = require("../essentials/constants");
 var adminHelpers = require("../helpers/admin-helpers");
 var productHelpers = require("../helpers/product-helpers");
 
+// Admin validation
+const validateAdmin = (req, res, next) => {
+  if (req.session.admin) next();
+  else res.redirect("/admin");
+};
+
 router.get("/", function (req, res, next) {
   if (req.session.admin) {
     adminHelpers
@@ -55,31 +61,35 @@ router.get("/logout", function (req, res, next) {
   req.session.destroy(() => res.redirect("/admin"));
 });
 
-//product details
-router.get("/products/add", function (req, res, next) {
-  if (req.session.admin) {
-    res.render("admin/productForm", {
-      title: constants["project-name"],
-      layout: "layout-admin",
-    });
-  } else {
-    res.redirect("/admin");
-  }
+// Product functions
+// Adding product
+router.get("/products/add", validateAdmin, function (req, res, next) {
+  res.render("admin/productForm", {
+    title: constants["project-name"],
+    layout: "layout-admin",
+  });
 });
 
-router.post("/products/add", function (req, res, next) {
-  if (req.session.admin) {
-    productHelpers
-      .addProduct(req)
-      .then(() => {
-        res.redirect("/admin");
-      })
-      .catch(() => {
-        res.send("Error");
-      });
-  } else {
-    res.redirect("/admin");
-  }
+router.post("/products/add", validateAdmin, function (req, res, next) {
+  productHelpers
+    .addProduct(req)
+    .then(() => {
+      res.redirect("/admin");
+    })
+    .catch(() => {
+      res.send("Error");
+    });
+});
+
+// Deleting a product
+router.post("/products/delete", validateAdmin, function (req, res, next) {
+  productHelpers
+    .deleteProduct(req.body.productId)
+    .then(() => res.redirect("/admin"))
+    .catch((err) => {
+      console.log(err)
+      res.render("admin/noProducts", { layout: "layout-admin" });
+    });
 });
 
 module.exports = router;
