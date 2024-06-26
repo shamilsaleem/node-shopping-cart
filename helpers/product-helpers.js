@@ -2,7 +2,7 @@ var formidable = require("formidable");
 var fs = require("fs");
 var path = require("path");
 var db = require("../essentials/database");
-var objectId = require('mongodb').ObjectId
+var objectId = require("mongodb").ObjectId;
 
 module.exports = {
   //Adding product to the database.
@@ -66,22 +66,36 @@ module.exports = {
   deleteProduct: function (productId) {
     return new Promise(async (resolve, reject) => {
       await db.collection.products
-        .deleteOne({ _id:new objectId(productId)})
+        .deleteOne({ _id: new objectId(productId) })
         .then(() => {
           filePath = path.join(
             path.resolve(__dirname, ".."),
             "/public/images/products/" + productId + ".jpg"
           );
-          fs.unlink(filePath, (err)=>{
-            if(err){
-              reject('Image deletion error')
-            }else{
+          fs.unlink(filePath, (err) => {
+            if (err) {
+              reject("Image deletion error");
+            } else {
               resolve();
             }
-          })
+          });
         })
         .catch(() => {
-          reject('Cant delete product');
+          reject("Cant delete product");
+        });
+    });
+  },
+
+  // Get details of a product
+  getProductData: function (productId) {
+    return new Promise(async (resolve, reject) => {
+      await db.collection.products
+        .findOne({ _id: new objectId(productId) })
+        .then((data) => {
+          resolve(data);
+        })
+        .catch(() => {
+          reject('Cannot get product data');
         });
     });
   },

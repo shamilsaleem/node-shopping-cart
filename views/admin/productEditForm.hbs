@@ -1,0 +1,84 @@
+<div class="container-sm">
+  <form
+    method="post"
+    action="/admin/products/add"
+    enctype="multipart/form-data"
+  >
+    <div class="row">
+      <h1 class="mt-4">Add Product</h1>
+      <div class="col-6">
+        <div data-mdb-input-init class="form-outline mb-4">
+          <label class="form-label" for="form6Example3">Product name</label>
+          <input
+            type="text"
+            name="productName"
+            id="form6Example3"
+            class="form-control"
+            required="true"
+            value="{{productData.productName}}"
+          />
+        </div>
+
+        <div data-mdb-input-init class="form-outline mb-4">
+          <label class="form-label" for="form6Example7">Product description</label>
+          <textarea
+            name="productDescription"
+            class="form-control"
+            id="form6Example7"
+            rows="4"
+            required="true"
+          >{{productData.productDescription}}</textarea>
+        </div>
+
+        <!-- Text input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+          <label class="form-label" for="form6Example4">MRP</label>
+          <input
+            type="number"
+            name="productMrp"
+            id="form6Example4"
+            class="form-control"
+            required="true"
+            value="{{productData.productMrp}}"
+          />
+        </div>
+
+        <!-- Email input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+          <label class="form-label" for="form6Example5">Price</label>
+          <input
+            type="number"
+            name="productPrice"
+            id="form6Example5"
+            class="form-control"
+            required="true"
+            value="{{productData.productPrice}}"
+          />
+        </div>
+
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-primary btn-block mb-4">Add Product</button>
+      </div>
+      <div class="col-6">
+        <div class="holder">
+          <label class="form-label" for="image">Product image</label>
+
+          <input
+            type="file"
+            name="productImage"
+            class="form-control"
+            id="photo"
+            required="true"
+            accept="image/*"
+          />
+          <img
+            class="mt-2"
+            id="imgPreview"
+            src="/images/products/{{productData._id}}.jpg"
+            alt="pic"
+          />
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
