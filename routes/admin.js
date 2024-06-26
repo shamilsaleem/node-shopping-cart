@@ -3,6 +3,7 @@ var router = express.Router();
 var path = require("path");
 var constants = require("../essentials/constants");
 var adminHelpers = require("../helpers/admin-helpers");
+var productHelpers = require("../helpers/product-helpers");
 
 router.get("/", function (req, res, next) {
   if (req.session.admin) {
@@ -23,7 +24,6 @@ router.get("/", function (req, res, next) {
       });
   } else {
     res.render("admin/login", {
-      title: constants["project-name"],
       layout: "layout-admin",
       login: true,
     });
@@ -42,4 +42,36 @@ router.post("/", function (req, res, next) {
       res.redirect("/admin");
     });
 });
+
+router.get("/logout", function (req, res, next) {
+  req.session.destroy(() => res.redirect("/admin"));
+});
+
+//product details
+router.get("/products/add", function (req, res, next) {
+  if (req.session.admin) {
+    res.render("admin/productForm", {
+      title: constants["project-name"],
+      layout: "layout-admin",
+    });
+  } else {
+    res.redirect("/admin");
+  }
+});
+
+router.post("/products/add", function (req, res, next) {
+  if (req.session.admin) {
+    productHelpers
+      .addProduct(req)
+      .then(() => {
+        res.redirect("/admin");
+      })
+      .catch(() => {
+        res.send("Error");
+      });
+  } else {
+    res.redirect("/admin");
+  }
+});
+
 module.exports = router;
