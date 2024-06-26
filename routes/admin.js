@@ -93,20 +93,40 @@ router.post("/products/delete", validateAdmin, function (req, res, next) {
 });
 
 // Edit a product
-router.get("/products/edit/:productId", function (req, res, next) {
-  let productId = req.params.productId;
-  productHelpers
-    .getProductData(productId)
-    .then((productData) => {
-      res.render("admin/productEditForm", {
-        title: constants["project-name"],
-        layout: "layout-admin",
-        productData,
+router.get(
+  "/products/edit/:productId",
+  validateAdmin,
+  function (req, res, next) {
+    let productId = req.params.productId;
+    productHelpers
+      .getProductData(productId)
+      .then((productData) => {
+        res.render("admin/productEditForm", {
+          title: constants["project-name"],
+          layout: "layout-admin",
+          productData,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
+  }
+);
+
+router.post(
+  "/products/edit/:productId",
+  validateAdmin,
+  function (req, res, next) {
+    let productId = req.params.productId;
+    productHelpers
+      .editProduct(req, productId)
+      .then(() => {
+        res.redirect("/admin");
+      })
+      .catch(() => {
+        res.send("Error");
+      });
+  }
+);
 
 module.exports = router;

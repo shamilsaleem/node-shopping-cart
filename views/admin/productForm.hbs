@@ -1,28 +1,56 @@
 <div class="container-sm">
-  <form method="post" action="/admin/products/add" enctype="multipart/form-data">
+  <form
+    method="post"
+    action="/admin/products/add"
+    enctype="multipart/form-data"
+  >
     <div class="row">
       <h1 class="mt-4">Add Product</h1>
       <div class="col-6">
         <div data-mdb-input-init class="form-outline mb-4">
           <label class="form-label" for="form6Example3">Product name</label>
-          <input type="text" name="productName" id="form6Example3" class="form-control" required="true"/>
+          <input
+            type="text"
+            name="productName"
+            id="form6Example3"
+            class="form-control"
+            required="true"
+          />
         </div>
 
         <div data-mdb-input-init class="form-outline mb-4">
           <label class="form-label" for="form6Example7">Product description</label>
-          <textarea name="productDescription" class="form-control" id="form6Example7" rows="4" required="true"></textarea>
+          <textarea
+            name="productDescription"
+            class="form-control"
+            id="form6Example7"
+            rows="4"
+            required="true"
+          ></textarea>
         </div>
 
         <!-- Text input -->
         <div data-mdb-input-init class="form-outline mb-4">
           <label class="form-label" for="form6Example4">MRP</label>
-          <input type="number" name="productMrp" id="form6Example4" class="form-control" required="true"/>
+          <input
+            type="number"
+            name="productMrp"
+            id="form6Example4"
+            class="form-control"
+            required="true"
+          />
         </div>
 
         <!-- Email input -->
         <div data-mdb-input-init class="form-outline mb-4">
           <label class="form-label" for="form6Example5">Price</label>
-          <input type="number" name="productPrice" id="form6Example5" class="form-control" required="true"/>
+          <input
+            type="number"
+            name="productPrice"
+            id="form6Example5"
+            class="form-control"
+            required="true"
+          />
         </div>
 
         <!-- Submit button -->
@@ -52,3 +80,11 @@
     </div>
   </form>
 </div>
+
+<script>
+  $(document).ready(() => { const photoInp = $("#photo"); let file;
+  photoInp.change(function (e) { file = this.files[0]; if (file) { let reader =
+  new FileReader(); reader.onload = function (event) { $("#imgPreview")
+  .attr("src", event.target.result); $("#imgPreview").css("display", "inline")
+  }; reader.readAsDataURL(file); } }); });
+</script>

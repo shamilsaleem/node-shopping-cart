@@ -1,7 +1,7 @@
 <div class="container-sm">
   <form
     method="post"
-    action="/admin/products/add"
+    action="/admin/products/edit/{{productData._id}}"
     enctype="multipart/form-data"
   >
     <div class="row">
@@ -57,7 +57,7 @@
         </div>
 
         <!-- Submit button -->
-        <button type="submit" class="btn btn-primary btn-block mb-4">Add Product</button>
+        <button type="submit" class="btn btn-primary btn-block mb-4">Update Product</button>
       </div>
       <div class="col-6">
         <div class="holder">
@@ -82,3 +82,11 @@
     </div>
   </form>
 </div>
+
+<script>
+  $(document).ready(() => { const photoInp = $("#photo"); let file;
+  photoInp.change(function (e) { file = this.files[0]; if (file) { let reader =
+  new FileReader(); reader.onload = function (event) { $("#imgPreview")
+  .attr("src", event.target.result); $("#imgPreview").css("display", "inline")
+  }; reader.readAsDataURL(file); } }); });
+</script>
