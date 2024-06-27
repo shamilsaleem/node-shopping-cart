@@ -1,5 +1,9 @@
 <div class="container mt-4">
   <h3 style="text-align: center;">All products</h3>
+  <a href="/admin/products/add"><button
+      type="button"
+      class="btn btn-success"
+    >Add product</button></a>
   <table id="myTable" class="table table-striped">
     <thead>
       <tr>
@@ -22,22 +26,19 @@
           <th>{{productMrp}}</th>
           <th>{{productPrice}}</th>
           <th>
-            <div class="container-sm" style="width: max-content;">
-              <div class="row">
-                <div class="col-6">
-                  <a href="/admin/products/edit/{{_id}}"><button
-                      type="button"
-                      class="btn btn-primary"
-                    >Edit</button></a>
-                </div>
-                <div class="col-6">
-                  <form action="/admin/products/delete/" method="post">
-                    <input type="hidden" name="productId" value="{{_id}}" />
-                    <button type="submit" class="btn btn-danger" onClick='return confirmSubmit()'>Delete</button>
-                  </form>
-                </div>
-              </div>
-            </div>
+            <a href="/admin/products/edit/{{_id}}" class="d-inline"><button
+                type="button"
+                class="btn btn-primary"
+              >Edit</button></a>
+            <form action="/admin/products/delete/" method="post" class="d-inline">
+              <input type="hidden" name="productId" value="{{_id}}" />
+              <button
+                type="submit"
+                class="btn btn-danger"
+                onClick="return confirmSubmit()"
+              >Delete</button>
+            </form>
+
           </th>
         </tr>
       {{/each}}

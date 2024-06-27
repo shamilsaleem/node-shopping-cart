@@ -3,12 +3,12 @@
     {{#each products}}
       <div class="cards col-3">
         <div class="card" style="width: 18rem;">
-          <img class="card-img-top" src="..." alt="Card image cap" />
+          <img class="card-img-top" src="/images/products/{{_id}}.jpg" alt="Card image cap" />
           <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card
-              title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
+            <h5 class="card-title">{{productName}}</h5>
+            <del><p class="d-inline card-text">₹{{productMrp}}</p></del>
+            <p class="d-inline card-text">₹{{productPrice}}</p>
+            <a href="#" class="d-block btn btn-primary">Add to cart</a>
           </div>
         </div>
       </div>
