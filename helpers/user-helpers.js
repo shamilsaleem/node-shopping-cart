@@ -1,5 +1,6 @@
 var db = require("../essentials/database");
 const bcrypt = require("bcrypt");
+var objectId = require("mongodb").ObjectId;
 const saltRounds = 10;
 
 module.exports = {
@@ -22,5 +23,39 @@ module.exports = {
         reject({ invalidUserCredentials: true });
       }
     });
+  },
+
+  // User login
+  doUserLogin: function (user) {
+    return new Promise(async (resolve, reject) => {
+      var userData = await db.collection.users.findOne({ email: user.email });
+      if (userData) {
+        bcrypt.compare(
+          user.password,
+          userData.password,
+          function (err, result) {
+            if (err) {
+              reject({ bcryptError: true });
+            } else {
+              if (result == true) {
+                resolve(userData);
+              } else {
+                reject({ invalidPassword: true });
+              }
+            }
+          }
+        );
+      } else {
+        reject({ invalidEmail: true });
+      }
+    });
+  },
+
+  //Get user data
+  getUserData: async function (userId) {
+    var userData = await db.collection.users.findOne({
+      _id: new objectId(userId),
+    });
+    return userData;
   },
 };

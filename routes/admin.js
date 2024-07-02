@@ -57,6 +57,7 @@ router.post("/", function (req, res, next) {
     });
 });
 
+// Admin logout
 router.get("/logout", function (req, res, next) {
   req.session.destroy(() => res.redirect("/admin"));
 });
