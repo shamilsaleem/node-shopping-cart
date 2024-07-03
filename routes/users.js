@@ -47,7 +47,10 @@ router.post("/addtocart", validateUser, function (req, res, next) {
     productId: req.body.productId,
     userId: req.session.userData,
   };
-  userHelpers.addToCart(data);
+  userHelpers
+    .addToCart(data)
+    .then(() => res.send({ productAddedtoCart: true }))
+    .catch(() => res.send({ productAddedtoCart: false }));
 });
 
 // User Logout

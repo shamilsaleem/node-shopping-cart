@@ -61,10 +61,32 @@ module.exports = {
 
   //Adding product to cart
   addToCart: async function (data) {
-    console.log(data)
-    await db.collection.users.updateOne(
-      { _id: new objectId(data.userId) },
-      { $push: { cart: data.productId } }
-    );
+    userData = await this.getUserData(data.userId);
+    return new Promise(async (resolve, reject) => {
+      if (
+        userData.cart !== undefined &&
+        userData.cart.find((product) => product._id === data.productId) !==
+          undefined
+      ) {
+        var qty =
+          userData.cart.find((product) => product._id === data.productId).qty +
+          1;
+        await db.collection.users
+          .updateOne(
+            { _id: new objectId(data.userId), "cart._id": data.productId },
+            { $set: { "cart.$.qty": qty } }
+          )
+          .then(() => resolve())
+          .catch(() => reject());
+      } else {
+        await db.collection.users
+          .updateOne(
+            { _id: new objectId(data.userId) },
+            { $push: { cart: { _id: data.productId, qty: 1 } } }
+          )
+          .then(() => resolve())
+          .catch(() => reject());
+      }
+    });
   },
 };
