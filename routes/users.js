@@ -2,6 +2,12 @@ var express = require("express");
 var router = express.Router();
 var userHelpers = require("../helpers/user-helpers");
 
+// User validation
+const validateUser = (req, res, next) => {
+  if (req.session.user) next();
+  else res.redirect("/users/login");
+};
+
 router.get("/", function (req, res, next) {
   res.redirect("/");
 });
@@ -18,8 +24,8 @@ router.post("/login", function (req, res, next) {
       req.session.userData = userData._id;
       res.redirect("/");
     })
-    .catch((err) =>{
-      console.log(err)
+    .catch((err) => {
+      console.log(err);
       res.redirect("/users/login");
     });
 });
@@ -33,6 +39,15 @@ router.post("/signup", function (req, res, next) {
     .addUser(req.body)
     .then(() => res.redirect("/users/login"))
     .catch(() => res.redirect("/users/signup"));
+});
+
+// Adding product to cart
+router.post("/addtocart", validateUser, function (req, res, next) {
+  var data = {
+    productId: req.body.productId,
+    userId: req.session.userData,
+  };
+  userHelpers.addToCart(data);
 });
 
 // User Logout

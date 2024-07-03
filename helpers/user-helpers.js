@@ -58,4 +58,13 @@ module.exports = {
     });
     return userData;
   },
+
+  //Adding product to cart
+  addToCart: async function (data) {
+    console.log(data)
+    await db.collection.users.updateOne(
+      { _id: new objectId(data.userId) },
+      { $push: { cart: data.productId } }
+    );
+  },
 };
