@@ -53,6 +53,21 @@ router.post("/addtocart", validateUser, function (req, res, next) {
     .catch(() => res.send({ productAddedtoCart: false }));
 });
 
+// Cart
+router.get("/cart", validateUser, async function (req, res, next) {
+  var userData = await userHelpers.getUserData(req.session.userData);
+  userHelpers
+    .getAllProductsInUserCart(req.session.userData)
+    .then((products) => {
+      res.render("users/cart", { userName: userData.name, products })
+    })
+    .catch((err) => {
+      if (err.noProductsInCart) {
+        res.render("users/noProductsInCart", { userName: userData.name });
+      }
+    });
+});
+
 // User Logout
 router.get("/logout", function (req, res, next) {
   req.session.destroy(() => res.redirect("/"));

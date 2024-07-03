@@ -1,4 +1,5 @@
 var db = require("../essentials/database");
+var productHelpers = require("./product-helpers");
 const bcrypt = require("bcrypt");
 var objectId = require("mongodb").ObjectId;
 const saltRounds = 10;
@@ -86,6 +87,30 @@ module.exports = {
           )
           .then(() => resolve())
           .catch(() => reject());
+      }
+    });
+  },
+
+  // Get cart products
+
+  getAllProductsInUserCart: function (userId) {
+    return new Promise(async (resolve, reject) => {
+      var userData = await this.getUserData(userId);
+      if (userData.cart && userData.cart.length !== 0) {
+        var cartProducts = [];
+        for (i in userData.cart) {
+          var singleProduct = await productHelpers.getProductData(
+            userData.cart[i]._id
+          );
+          singleProduct.productQty = userData.cart[i].qty;
+          singleProduct.productMrp = parseInt(singleProduct.productMrp)
+          singleProduct.productPrice = parseInt(singleProduct.productPrice)
+          singleProduct.productTotelPrice = singleProduct.productQty * singleProduct.productPrice
+          cartProducts.push(singleProduct);
+        }
+        resolve(cartProducts);
+      } else {
+        reject({ noProductsInCart: true });
       }
     });
   },
