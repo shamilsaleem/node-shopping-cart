@@ -46,11 +46,12 @@ router.post("/addtocart", validateUser, function (req, res, next) {
   var data = {
     productId: req.body.productId,
     userId: req.session.userData,
+    qty: req.body.qty
   };
   userHelpers
     .addToCart(data)
-    .then(() => res.send({ productAddedtoCart: true }))
-    .catch(() => res.send({ productAddedtoCart: false }));
+    .then((data) => res.send(data))
+    .catch((data) => res.send(data));
 });
 
 // Cart
@@ -58,8 +59,8 @@ router.get("/cart", validateUser, async function (req, res, next) {
   var userData = await userHelpers.getUserData(req.session.userData);
   userHelpers
     .getAllProductsInUserCart(req.session.userData)
-    .then((products) => {
-      res.render("users/cart", { userName: userData.name, products })
+    .then((data) => {
+      res.render("users/cart", { userName: userData.name, products:data.cartProducts, cartSum:data.cartSum })
     })
     .catch((err) => {
       if (err.noProductsInCart) {

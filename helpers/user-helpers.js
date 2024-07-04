@@ -71,22 +71,32 @@ module.exports = {
       ) {
         var qty =
           userData.cart.find((product) => product._id === data.productId).qty +
-          1;
-        await db.collection.users
-          .updateOne(
-            { _id: new objectId(data.userId), "cart._id": data.productId },
-            { $set: { "cart.$.qty": qty } }
-          )
-          .then(() => resolve())
-          .catch(() => reject());
+          data.qty;
+        if (qty !== 0) {
+          await db.collection.users
+            .updateOne(
+              { _id: new objectId(data.userId), "cart._id": data.productId },
+              { $set: { "cart.$.qty": qty } }
+            )
+            .then(() => resolve({ productAddedtoCart: true }))
+            .catch(() => reject({ productAddedtoCart: false }));
+        } else {
+          await db.collection.users
+            .updateOne(
+              { _id: new objectId(data.userId) },
+              { $pull: { cart: { _id: data.productId } } }
+            )
+            .then(() => resolve({ productDeletedFromCart: true }))
+            .catch(() => reject({ productAddedtoCart: false }));
+        }
       } else {
         await db.collection.users
           .updateOne(
             { _id: new objectId(data.userId) },
-            { $push: { cart: { _id: data.productId, qty: 1 } } }
+            { $push: { cart: { _id: data.productId, qty: data.qty } } }
           )
-          .then(() => resolve())
-          .catch(() => reject());
+          .then(() => resolve({ productAddedtoCart: true }))
+          .catch(() => reject({ productAddedtoCart: false }));
       }
     });
   },
@@ -98,20 +108,42 @@ module.exports = {
       var userData = await this.getUserData(userId);
       if (userData.cart && userData.cart.length !== 0) {
         var cartProducts = [];
+        var cartSum = 0;
         for (i in userData.cart) {
           var singleProduct = await productHelpers.getProductData(
             userData.cart[i]._id
           );
           singleProduct.productQty = userData.cart[i].qty;
-          singleProduct.productMrp = parseInt(singleProduct.productMrp)
-          singleProduct.productPrice = parseInt(singleProduct.productPrice)
-          singleProduct.productTotelPrice = singleProduct.productQty * singleProduct.productPrice
+          singleProduct.productMrp = parseInt(singleProduct.productMrp);
+          singleProduct.productPrice = parseInt(singleProduct.productPrice);
+          singleProduct.productTotelPrice =
+            singleProduct.productQty * singleProduct.productPrice;
+
+          cartSum += singleProduct.productTotelPrice;
           cartProducts.push(singleProduct);
         }
-        resolve(cartProducts);
+        resolve({ cartProducts, cartSum });
       } else {
         reject({ noProductsInCart: true });
       }
     });
   },
+
+  // Get no of products in user cart
+  getProductsNoInUserCart: function (userId) {
+    return new Promise(async (resolve, reject) => {
+      var userData = await this.getUserData(userId);
+      if (userData.cart && userData.cart.length !== 0) {
+        var productCount = 0;
+        for (i in userData.cart) {
+          productCount += userData.cart[i].qty;
+        }
+        resolve(productCount);
+      } else {
+        resolve(0);
+      }
+    });
+  },
+
+  changeCartProductQty: function () {},
 };

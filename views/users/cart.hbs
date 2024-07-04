@@ -11,21 +11,31 @@
     </thead>
     <tbody>
       {{#each products}}
-        <tr>
-          <th><img
+        <tr id="product-{{_id}}">
+          <td><img
               src="/images/products/{{_id}}.jpg"
               width="20px"
               height="20px"
-            /></th>
-          <th>{{productName}}</th>
-          <th>₹ {{productPrice}}</th>
-          <th>{{productQty}}</th>
-          <th>
-            ₹ {{productTotelPrice}}
-          </th>
+            /></td>
+          <td>{{productName}}</td>
+          <td>₹ {{productPrice}}</td>
+          <td><button
+              class="btn btn-secondary btn-sm"
+              onclick="changeCartItemQty('{{_id}}', -1, {{productPrice}})"
+            >-</button><span id="qty-{{_id}}">{{productQty}}</span><button
+              class="btn btn-secondary btn-sm"
+              onclick="changeCartItemQty('{{_id}}', 1, {{productPrice}})"
+            >+</button></td>
+          <td>
+            ₹
+            <span id="totel-{{_id}}">{{productTotelPrice}}</span>
+          </td>
         </tr>
       {{/each}}
+      <tr>
+        <th colspan="4">Totel</th>
+        <th>₹ <span id="cartSum">{{cartSum}}</span></th>
+      </tr>
     </tbody>
   </table>
 </div>
-
