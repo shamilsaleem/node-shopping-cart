@@ -1,0 +1,111 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-6">
+      <h1 class="mt-4">Cart items</h1>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Qty</th>
+            <th>Totel</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each products}}
+            <tr id="product-{{_id}}">
+              <td><img
+                  src="/images/products/{{_id}}.jpg"
+                  width="20px"
+                  height="20px"
+                /></td>
+              <td>{{productName}}</td>
+              <td>₹ {{productPrice}}</td>
+              <td>{{productQty}}</td>
+              <td>
+                ₹
+                <span id="totel-{{_id}}">{{productTotelPrice}}</span>
+              </td>
+            </tr>
+          {{/each}}
+          <tr>
+            <th colspan="4">Totel</th>
+            <th>₹ <span id="cartSum">{{cartSum}}</span></th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-6">
+      <h1 class="mt-4">Order details</h1>
+      <form class="row g-3" method="post" action="/users/placeorder">
+
+        <div class="col-12">
+          <label for="inputAddress" class="form-label">Address</label>
+          <input
+            name="address"
+            type="text"
+            class="form-control"
+            id="inputAddress"
+            placeholder="1234 Main St"
+            required
+          />
+        </div>
+
+        <div class="col-12">
+          <label for="inputAddress2" class="form-label">Address 2</label>
+          <input
+            name="address2"
+            type="text"
+            class="form-control"
+            id="inputAddress2"
+            placeholder="Apartment, studio, or floor"
+            required
+          />
+        </div>
+
+        <div class="col-md-6">
+          <label for="inputCity" class="form-label">City</label>
+          <input name="city" type="text" class="form-control" id="inputCity" required/>
+        </div>
+
+        <div class="col-md-2">
+          <label for="inputZip" class="form-label">Zip</label>
+          <input name="zip" type="number" class="form-control" id="inputZip" minlength="6" maxlength="6" required/>
+        </div>
+
+        <div class="col-12">
+          <h3 class="form-label">Payment method</h3>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="paymentmethod"
+              id="flexRadioDefault1"
+              value="cod"
+            />
+            <label class="form-check-label" for="flexRadioDefault1">
+              Cash on delivery
+            </label>
+          </div>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="paymentmethod"
+              id="flexRadioDefault2"
+              value="op"
+              checked
+            />
+            <label class="form-check-label" for="flexRadioDefault2">
+              Online payment
+            </label>
+          </div>
+        </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary">Place Order</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

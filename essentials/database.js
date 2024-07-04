@@ -23,6 +23,6 @@ module.exports.connect = run().then(() => {
   module.exports.collection = {
     products: db.state.db(db_name).collection("products"),
     users: db.state.db(db_name).collection("users"),
-    orders: db.state.db(db_name).collection("users"),
+    orders: db.state.db(db_name).collection("orders"),
   };
 });

@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var userHelpers = require("../helpers/user-helpers");
+var orderHelpers = require("../helpers/order-helpers");
 
 // User validation
 const validateUser = (req, res, next) => {
@@ -46,7 +47,7 @@ router.post("/addtocart", validateUser, function (req, res, next) {
   var data = {
     productId: req.body.productId,
     userId: req.session.userData,
-    qty: req.body.qty
+    qty: req.body.qty,
   };
   userHelpers
     .addToCart(data)
@@ -60,7 +61,11 @@ router.get("/cart", validateUser, async function (req, res, next) {
   userHelpers
     .getAllProductsInUserCart(req.session.userData)
     .then((data) => {
-      res.render("users/cart", { userName: userData.name, products:data.cartProducts, cartSum:data.cartSum })
+      res.render("users/cart", {
+        userName: userData.name,
+        products: data.cartProducts,
+        cartSum: data.cartSum,
+      });
     })
     .catch((err) => {
       if (err.noProductsInCart) {
@@ -68,6 +73,41 @@ router.get("/cart", validateUser, async function (req, res, next) {
       }
     });
 });
+
+//Place order
+router.get("/placeorder", validateUser, async function (req, res, next) {
+  var userData = await userHelpers.getUserData(req.session.userData);
+  userHelpers
+    .getAllProductsInUserCart(req.session.userData)
+    .then((data) => {
+      res.render("users/placeOrder", {
+        userName: userData.name,
+        products: data.cartProducts,
+        cartSum: data.cartSum,
+      });
+    })
+    .catch((err) => {
+      if (err.noProductsInCart) {
+        res.render("users/noProductsInCart", { userName: userData.name });
+      }
+    });
+});
+
+router.post("/placeorder", validateUser, function (req, res, next) {
+  var paymentmethod = req.body.paymentmethod;
+  delete req.body.paymentmethod;
+
+  if (paymentmethod == "cod") {
+    orderHelpers
+      .placeOrder(req.session.userData, paymentmethod, req.body)
+      .then(() => res.redirect("/"));
+  } else{
+    res.redirect('/users/cart')
+  }
+});
+
+// Orders route
+router.get("/orders", validateUser, function (req, res, next) {});
 
 // User Logout
 router.get("/logout", function (req, res, next) {

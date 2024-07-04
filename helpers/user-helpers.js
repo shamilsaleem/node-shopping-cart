@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 var db = require("../essentials/database");
 var productHelpers = require("./product-helpers");
 const bcrypt = require("bcrypt");
@@ -145,5 +146,12 @@ module.exports = {
     });
   },
 
-  changeCartProductQty: function () {},
+  clearCart: function (userId) {
+    return new Promise((resolve, reject) => {
+      db.collection.users
+        .updateOne({ _id: new ObjectId(userId) }, { $unset: { cart: "" } })
+        .then(() => resolve())
+        .catch(() => reject());
+    });
+  },
 };
