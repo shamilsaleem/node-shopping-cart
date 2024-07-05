@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var userHelpers = require("../helpers/user-helpers");
 var orderHelpers = require("../helpers/order-helpers");
+var constants = require("../essentials/constants");
 
 // User validation
 const validateUser = (req, res, next) => {
@@ -14,7 +15,8 @@ router.get("/", function (req, res, next) {
 });
 
 router.get("/login", function (req, res, next) {
-  res.render("users/login", { login: true });
+  if (req.session.user) res.redirect("/");
+  else res.render("users/login", { login: true });
 });
 
 router.post("/login", function (req, res, next) {
@@ -32,7 +34,8 @@ router.post("/login", function (req, res, next) {
 });
 
 router.get("/signup", function (req, res, next) {
-  res.render("users/signup", { login: true });
+  if (req.session.user) res.redirect("/users/logout");
+  else res.render("users/signup", { login: true });
 });
 
 router.post("/signup", function (req, res, next) {
@@ -62,6 +65,7 @@ router.get("/cart", validateUser, async function (req, res, next) {
     .getAllProductsInUserCart(req.session.userData)
     .then((data) => {
       res.render("users/cart", {
+        title: constants["project-name"],
         userName: userData.name,
         products: data.cartProducts,
         cartSum: data.cartSum,
@@ -69,7 +73,11 @@ router.get("/cart", validateUser, async function (req, res, next) {
     })
     .catch((err) => {
       if (err.noProductsInCart) {
-        res.render("users/noProductsInCart", { userName: userData.name });
+        res.render("users/message", {
+          title: constants["project-name"],
+          userName: userData.name,
+          message: "No products in the cart",
+        });
       }
     });
 });
@@ -88,7 +96,11 @@ router.get("/placeorder", validateUser, async function (req, res, next) {
     })
     .catch((err) => {
       if (err.noProductsInCart) {
-        res.render("users/noProductsInCart", { userName: userData.name });
+        res.render("users/message", {
+          title: constants["project-name"],
+          userName: userData.name,
+          message: "No products in the cart",
+        });
       }
     });
 });
@@ -101,13 +113,32 @@ router.post("/placeorder", validateUser, function (req, res, next) {
     orderHelpers
       .placeOrder(req.session.userData, paymentmethod, req.body)
       .then(() => res.redirect("/"));
-  } else{
-    res.redirect('/users/cart')
+  } else {
+    res.redirect("/users/cart");
   }
 });
 
 // Orders route
-router.get("/orders", validateUser, function (req, res, next) {});
+router.get("/orders", validateUser, async function (req, res, next) {
+  var userData = await userHelpers.getUserData(req.session.userData);
+  orderHelpers
+    .getAllOrdersByAUser(req.session.userData)
+    .then((orders) => {
+      res.render("users/orders", {
+        userName: userData.name,
+        title: constants["project-name"],
+        layout: "layout",
+        orders,
+      });
+    })
+    .catch(() => {
+      res.render("users/message", {
+        title: constants["project-name"],
+        userName: userData.name,
+        message: "You have no orders",
+      });
+    });
+});
 
 // User Logout
 router.get("/logout", function (req, res, next) {

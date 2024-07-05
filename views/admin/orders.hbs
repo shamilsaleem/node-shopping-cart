@@ -1,0 +1,61 @@
+<div class="container mt-3 mb-3">
+  {{#each orders}}
+    <div class="card mt-3">
+      <div class="card-header">
+        <p class="d-inline">order-id:</p>
+        <p class="d-inline font-monospace">{{_id}}</p>
+      </div>
+      <div class="card-body">
+        <p class="d-inline font-monospace">{{date}}</p>
+        <div class="row">
+          <div class="col-6">
+            <h4 class="card-title">User: {{userName}} </h4>
+            <h5>Address:-</h5>
+            <p class="card-text">{{address.address}},
+              {{address.address2}},
+              {{address.city}},
+              {{address.zip}}
+            </p>
+            <h5>Payment methode: {{paymentmethod}}</h5>
+          </div>
+          <div class="col-6">
+            <h4>Order items</h4>
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Name</th>
+                  <th>Price</th>
+                  <th>Qty</th>
+                  <th>Totel</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each products}}
+                  <tr id="product-{{_id}}">
+                    <td><img
+                        src="/images/products/{{productId}}.jpg"
+                        width="20px"
+                        height="20px"
+                      /></td>
+                    <td>{{productName}}</td>
+                    <td>₹ {{productPrice}}</td>
+                    <td>{{productQty}}</td>
+                    <td>
+                      ₹
+                      <span>{{productTotelPrice}}</span>
+                    </td>
+                  </tr>
+                {{/each}}
+                <tr>
+                  <th colspan="4">Totel</th>
+                  <th>₹ <span id="cartSum">{{cartSum}}</span></th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/each}}
+</div>

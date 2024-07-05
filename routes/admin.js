@@ -4,6 +4,7 @@ var path = require("path");
 var constants = require("../essentials/constants");
 var adminHelpers = require("../helpers/admin-helpers");
 var productHelpers = require("../helpers/product-helpers");
+const orderHelpers = require("../helpers/order-helpers");
 
 // Admin validation
 const validateAdmin = (req, res, next) => {
@@ -26,7 +27,10 @@ router.get("/", function (req, res, next) {
             });
           })
           .catch(() => {
-            res.render("admin/noProducts", { layout: "layout-admin" });
+            res.render("admin/message", {
+              layout: "layout-admin",
+              message: "No products added",
+            });
           });
       })
       .catch(() => {
@@ -89,7 +93,10 @@ router.post("/products/delete", validateAdmin, function (req, res, next) {
     .then(() => res.redirect("/admin"))
     .catch((err) => {
       console.log(err);
-      res.render("admin/noProducts", { layout: "layout-admin" });
+      res.render("admin/message", {
+        layout: "layout-admin",
+        message: "No products added",
+      });
     });
 });
 
@@ -129,5 +136,26 @@ router.post(
       });
   }
 );
+
+// Getting all orders
+
+router.get("/orders", validateAdmin, async function (req, res, next) {
+  orderHelpers
+    .getAllOrders()
+    .then((orders) => {
+      res.render("admin/orders", {
+        title: constants["project-name"],
+        layout: "layout-admin",
+        orders,
+      });
+    })
+    .catch(() => {
+      res.render("admin/message", {
+        title: constants["project-name"],
+        layout: "layout-admin",
+        message: "No order recieved"
+      });
+    });
+});
 
 module.exports = router;
