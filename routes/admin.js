@@ -5,6 +5,7 @@ var constants = require("../essentials/constants");
 var adminHelpers = require("../helpers/admin-helpers");
 var productHelpers = require("../helpers/product-helpers");
 const orderHelpers = require("../helpers/order-helpers");
+const userHelpers = require("../helpers/user-helpers");
 
 // Admin validation
 const validateAdmin = (req, res, next) => {
@@ -92,10 +93,9 @@ router.post("/products/delete", validateAdmin, function (req, res, next) {
     .deleteProduct(req.body.productId)
     .then(() => res.redirect("/admin"))
     .catch((err) => {
-      console.log(err);
       res.render("admin/message", {
         layout: "layout-admin",
-        message: "No products added",
+        message: err,
       });
     });
 });
@@ -153,7 +153,40 @@ router.get("/orders", validateAdmin, async function (req, res, next) {
       res.render("admin/message", {
         title: constants["project-name"],
         layout: "layout-admin",
-        message: "No order recieved"
+        message: "No order recieved",
+      });
+    });
+});
+
+// Getting all users
+router.get("/users", validateAdmin, function (req, res, next) {
+  userHelpers
+    .getAllUsers()
+    .then((users) => {
+      res.render("admin/users", {
+        title: constants["project-name"],
+        layout: "layout-admin",
+        users,
+      });
+    })
+    .catch(() => {
+      res.render("admin/message", {
+        layout: "layout-admin",
+        message: "No users signed in",
+      });
+    });
+});
+
+// Deleting a user
+router.post("/users/delete", validateAdmin, function (req, res, next) {
+  userHelpers
+    .deleteUser(req.body.userId)
+    .then(() => res.redirect("/admin"))
+    .catch((err) => {
+      console.log(err);
+      res.render("admin/message", {
+        layout: "layout-admin",
+        message: err,
       });
     });
 });

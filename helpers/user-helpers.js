@@ -146,6 +146,31 @@ module.exports = {
     });
   },
 
+  //Get all users
+  getAllUsers: function () {
+    return new Promise(async (resolve, reject) => {
+      var users = await db.collection.users.find().toArray();
+      if (users.length == 0) {
+        reject();
+      } else {
+        resolve(users);
+      }
+    });
+  },
+
+  // Deleting a user
+  deleteUser: function (userId) {
+    return new Promise(async (resolve, reject) => {
+      await db.collection.users
+        .deleteOne({ _id: new objectId(userId) })
+        .then(() => resolve())
+        .catch(() => {
+          reject("Can't delete this user");
+        });
+    });
+  },
+
+  // Clear cart
   clearCart: function (userId) {
     return new Promise((resolve, reject) => {
       db.collection.users

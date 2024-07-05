@@ -1,0 +1,32 @@
+<div class="container mt-4">
+  <h3 style="text-align: center;">All users</h3>
+  <table id="myTable" class="table table-striped">
+    <thead>
+      <tr>
+        <th>_id</th>
+        <th>Name</th>
+        <th>E-mail</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each users}}
+        <tr>
+          <th>{{_id}}</th>
+          <th>{{name}}</th>
+          <th>{{email}}</th>
+          <th>
+            <form action="/admin/users/delete/" method="post">
+              <input type="hidden" name="userId" value="{{_id}}" />
+              <button
+                type="submit"
+                class="btn btn-danger"
+                onClick="return confirmSubmit()"
+              >Delete</button>
+            </form>
+          </th>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

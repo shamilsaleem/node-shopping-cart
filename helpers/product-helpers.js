@@ -81,7 +81,7 @@ module.exports = {
           });
         })
         .catch(() => {
-          reject("Cant delete product");
+          reject("Can't delete this product");
         });
     });
   },

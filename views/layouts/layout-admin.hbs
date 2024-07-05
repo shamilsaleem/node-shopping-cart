@@ -9,7 +9,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    <link href="DataTables/datatables.min.css" rel="stylesheet" />
+    <link href="/DataTables/datatables.min.css" rel="stylesheet" />
 
   </head>
   <body>
@@ -18,10 +18,10 @@
     {{/if}}
     {{{body}}}
     <script src="/bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js"></script>
-    <script src="DataTables/datatables.min.js"></script>
+    <script src="/DataTables/datatables.min.js"></script>
     <script>
       $(document).ready( function () { $('#myTable').DataTable(); } ); function
-      confirmSubmit() { var agree=confirm("Are you sure you wish to delete this product?");
+      confirmSubmit() { var agree=confirm("Are you sure you wish to delete?");
       if (agree) return true ; else return false ; }
     </script>
   </body>
